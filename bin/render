@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+#
+# Copyright (c) 2019-present, Blue Marble Payroll, LLC
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+#
+
+require 'bundler/setup'
+require 'proforma/prawn_renderer'
+require 'fileutils'
+require 'yaml'
+require 'pry'
+require 'pdf/inspector'
+
+def read_yaml(filename)
+  YAML.safe_load(read(filename))
+end
+
+def read(filename)
+  File.open(filename, 'r:bom|utf-8').read
+end
+
+def data_merge(data, hash)
+  if data.is_a?(Array)
+    data.map do |record|
+      record.merge(hash)
+    end
+  elsif data.is_a?(Hash)
+    data.merge(hash)
+  end
+end
+
+jobs_dir = File.join('tmp', 'jobs')
+output_dir = File.join('tmp', 'jobs_output')
+
+jobs = Dir[File.join(jobs_dir, '*.yml')]
+
+if jobs.empty?
+  puts "No jobs detected in the path: #{jobs_dir}"
+  puts '--------------------------------------------------------------'
+  puts "To use, place YAML files into #{jobs_dir} directory."
+  puts 'You can find example YAML files in: spec/fixtures/snapshots'
+  puts '--------------------------------------------------------------'
+
+  exit
+end
+
+images_dir = File.join('tmp', 'images', '*')
+
+images_hash = Dir[images_dir].map do |image_filename|
+  key = File.basename(image_filename, File.extname(image_filename))
+  [key, File.open(image_filename, 'rb')]
+end.to_h
+
+jobs.each do |job|
+  job_name = File.basename(job, File.extname(job))
+
+  puts "Rendering: #{job_name} (#{job})"
+
+  contents        = read_yaml(job)
+  data            = data_merge(contents['data'], images_hash)
+  template        = contents['template']
+  evaluator       = contents['evaluator'] || Proforma::HashEvaluator.new
+  renderer        = contents['renderer'] || Proforma::PrawnRenderer.new
+  job_output_dir  = File.join(output_dir, job_name)
+
+  FileUtils.mkdir_p(job_output_dir)
+
+  outputs = Proforma.render(
+    data,
+    template,
+    evaluator: evaluator,
+    renderer: renderer
+  )
+
+  outputs.each_with_index do |output, index|
+    name_without_extension = [
+      index.to_s,
+      output.title.to_s
+    ].reject(&:empty?).join('.')
+
+    filename = "#{name_without_extension}#{output.extension}"
+
+    IO.write(File.join(job_output_dir, filename), output.contents)
+  end
+
+  puts "Done Rendering: #{job} (output can be found in: #{job_output_dir})"
+end

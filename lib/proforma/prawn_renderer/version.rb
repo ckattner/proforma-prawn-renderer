@@ -8,7 +8,7 @@
 #
 
 module Proforma
-  module PrawnRenderer
-    VERSION = '0.0.1'
+  class PrawnRenderer
+    VERSION = '1.0.0-alpha.2'
   end
 end

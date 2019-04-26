@@ -1,0 +1,116 @@
+data:
+  users:
+  - id: 1
+    first: Will
+    last: Smith
+    username: will_smith
+    login_count: 9219
+    phone_numbers:
+    - type: cell
+      number: 555-444-3333
+    - type: fax
+      number: 333-444-2222
+  - id: 2
+    first: Martin
+    last: Lawrence
+    username: mlaw10
+    login_count: 8077
+    phone_numbers:
+    - type: home
+      number: 999-888-7777
+  - id: 3
+    first: Will
+    last: Ferrell
+    username: will.ferrell
+    login_count: 190890
+    phone_numbers:
+
+template:
+  title: User List
+  children:
+  - type: Banner
+    details: "555 N. Michigan Ave.\nChicago, IL 62626\n555-555-5555 ext. 55555"
+    image: logo
+    image_width: 60
+    image_height: 48
+    title: Some Random System
+  - type: Spacer
+  - type: Header
+    value: User List
+  - type: Separator
+  - type: Text
+    value: The following is a list of users
+  - type: Spacer
+  - type: DataTable
+    property: users
+    aggregators:
+      - property: login_count
+        function: sum
+        name: login_count_sum
+      - property: login_count
+        function: ave
+        name: login_count_ave
+    columns:
+    - header: ID Number
+      body: $id
+      footer: Login Count Ave.
+      width: 20
+    - header: First Name
+      body: $first
+      footer: $login_count_ave
+      width: 20
+    - header: Last Name
+      body: $last
+      width: 20
+    - header: Username
+      body: $username
+      footer: Login Count Sum
+      width: 20
+    - header: Login Count
+      footer: $login_count_sum
+      body: $login_count
+      width: 20
+  - type: Grouping
+    property: users
+    children:
+    - type: Spacer
+    - type: Grouping
+      children:
+      - type: Header
+        value: 'User Details'
+      - type: Separator
+      - type: Pane
+        columns:
+        - label_width: 25.0
+          lines:
+          - label: ID Number
+            value: $id
+          - label: First Name
+            value: $first
+          - label: Last Name
+            value: $last
+      - type: Spacer
+      - type: Header
+        value: Phone Numbers
+      - type: DataTable
+        property: phone_numbers
+        empty_message: No phone numbers.
+        columns:
+        - header: Type
+          body: $type
+        - header: Number
+          body: $number
+      - type: Spacer
+
+strings:
+- >-
+  Some Random System 555 N. Michigan Ave. Chicago, IL 62626 555-555-5555 ext. 55555
+  User List The following is a list of users ID Number First Name Last Name Username
+  Login Count
+  1 Will Smith will_smith 9219 2 Martin Lawrence mlaw10 8077
+  3 Will Ferrell will.ferrell 190890
+  Login Count Ave. 69395.3333333333333 33333 Login Count Sum 208186.0
+  User Details ID Number 1 First Name Will Last Name Smith Phone Numbers Type Number
+  cell 555-444-3333 fax 333-444-2222 User Details ID Number 2 First Name Martin Last Name
+  Lawrence Phone Numbers Type Number home 999-888-7777 User Details ID Number 3 First Name
+  Will Last Name Ferrell Phone Numbers No phone numbers.

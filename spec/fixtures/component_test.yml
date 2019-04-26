@@ -1,0 +1,30 @@
+data:
+- id: 1
+  children:
+  - id: 2
+  - id: 3
+
+template:
+  split: true
+  title: $id
+  children:
+  - type: Banner
+    details: Banner Details
+    title: Banner Title
+  - type: Spacer
+  - type: Header
+    value: Header
+  - type: Separator
+  - type: Text
+    value: Text
+  - type: DataTable
+    property: children
+    columns:
+    - header: ID Number
+      body: $id
+  - type: Pane
+    columns:
+    - label_width: 25.0
+      lines:
+      - label: ID Number
+        value: $id
