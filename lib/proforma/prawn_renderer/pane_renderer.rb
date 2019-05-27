@@ -14,6 +14,10 @@ module Proforma
     # This class understands how to ender a Proforma::Modeling::Pane component.
     class PaneRenderer < Renderer
       def render(pane)
+        rows = make_rows(pane.columns)
+
+        return unless rows&.length&.positive?
+
         pdf.table(
           make_rows(pane.columns),
           column_widths: make_column_widths(pane.columns),
@@ -25,9 +29,13 @@ module Proforma
 
       def make_rows_shell(columns)
         total_columns = columns.length * 2
-        total_rows = columns.map(&:line_count).max
+        total_rows = columns.map(&:line_count)&.max || 0
 
-        (0...total_rows).map { Array.new(total_columns) }
+        (0...total_rows).map do
+          (0...total_columns).map do
+            pdf.make_cell('', base_value_cell_style)
+          end
+        end
       end
 
       def value_cell_padding(column_index, total_columns)

@@ -28,3 +28,29 @@ template:
       lines:
       - label: ID Number
         value: $id
+  - type: Text
+    value: Pane with no columns
+  - type: Pane
+    columns:
+  - type: Text
+    value: Pane with 1 column, no lines
+  - type: Pane
+    columns:
+    - label_width: 25.0
+      lines:
+  - type: Text
+    value: Pane with 2 columns, with un-even amount of lines per column.
+  - type: Pane
+    columns:
+    - label_width: 25.0
+      lines:
+        - label: ID Number
+          value: $id
+        - label: ID Number
+          value: $id
+    - label_width: 25.0
+      lines:
+        - label: ID Number
+          value: $id
+    - label_width: 25.0
+      lines:
