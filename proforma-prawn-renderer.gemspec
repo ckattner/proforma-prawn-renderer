@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Proforma renderer plugin for generating PDFs using Prawn'
 
   s.description = <<-DESCRIPTION
-
+    Proforma is a virtual document object model.  This library allows you to output PDF for a virtual Proforma document.
   DESCRIPTION
 
   s.authors     = ['Matthew Ruggio']
