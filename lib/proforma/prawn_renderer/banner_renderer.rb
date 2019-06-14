@@ -64,8 +64,10 @@ module Proforma
       def cell_style
         @cell_style ||= {
           border_width: 0,
-          padding: 0,
           font: font_name,
+          min_font_size: 1,
+          overflow: :shrink_to_fit,
+          padding: 0,
           size: text_font_size
         }
       end

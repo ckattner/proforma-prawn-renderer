@@ -1,3 +1,8 @@
+# 1.0.2 (June 14th, 2019)
+
+* Added overflow and min_font_size attributes to cell_style for tables.
+* Fixed bug where value_width was not being honored.
+
 # 1.0.1 (May 27th, 2019)
 
 * Fixed rendering bug when Pane has 0 columns

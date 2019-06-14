@@ -78,22 +78,26 @@ module Proforma
       end
 
       def make_column_widths(columns)
-        column_widths = {}
+        {}.tap do |column_widths|
+          columns.each_with_index do |column, index|
+            label_width = column.label_width
+            value_width = column.value_width
 
-        columns.each_with_index do |column, index|
-          label_width = column.label_width
-          next unless label_width
+            label_index = index * 2
+            value_index = label_index + 1
 
-          column_widths[index * 2] = calculate_width(label_width)
+            column_widths[label_index] = calculate_width(label_width) if label_width
+            column_widths[value_index] = calculate_width(value_width) if value_width
+          end
         end
-
-        column_widths
       end
 
       def base_value_cell_style
         @base_value_cell_style ||= {
           border_width: 0,
           font: font_name,
+          min_font_size: 1,
+          overflow: :shrink_to_fit,
           padding: [2, 0, 2, 2],
           size: text_font_size
         }
@@ -101,8 +105,8 @@ module Proforma
 
       def base_label_cell_style
         @base_label_cell_style ||= base_value_cell_style.merge(
-          padding: [2, 2, 2, 0],
-          font_style: bold_font_style
+          font_style: bold_font_style,
+          padding: [2, 2, 2, 0]
         )
       end
     end
