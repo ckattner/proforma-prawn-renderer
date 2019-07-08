@@ -16,7 +16,7 @@ module Proforma
           free_spots = values.count(&:nil?)
 
           if free_spots.positive?
-            available_value = sum - values.sum(&:to_f)
+            available_value = sum - values.map(&:to_i).reduce(0, :+)
 
             new_values = divide(free_spots, available_value, round)
 
@@ -29,7 +29,7 @@ module Proforma
         private
 
         def balance(values, sum, round)
-          difference = sum - values.sum
+          difference = sum - values.map(&:to_i).reduce(0, :+)
 
           return values if difference.zero?
 
