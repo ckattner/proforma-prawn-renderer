@@ -1,3 +1,7 @@
+# 1.0.3 (July 7th, 2019)
+
+* Added better pane width balancing algorithm that fixes some width assignment bugs.
+
 # 1.0.2 (June 14th, 2019)
 
 * Added overflow and min_font_size attributes to cell_style for tables.

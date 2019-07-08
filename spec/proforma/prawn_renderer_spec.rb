@@ -80,4 +80,38 @@ describe ::Proforma::PrawnRenderer do
 
     expect(documents.first.contents).to eq(pdf)
   end
+
+  specify 'panes with un-even column widths equalize' do
+    data = [
+      { id: 1, name: 'Chicago Bulls' },
+      { id: 2, name: 'Indiana Pacers' },
+      { id: 3, name: 'Boston Celtics' }
+    ]
+
+    template = {
+      children: [
+        {
+          type: 'Pane',
+          columns: [
+            {
+              label_width: '0.5',
+              value_width: '',
+              lines: [
+                { label: 'Label', value: 'Value' }
+              ]
+            },
+            {
+              label_width: '10',
+              value_width: '',
+              lines: [
+                { label: 'Label', value: 'Value' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    Proforma.render(data, template, renderer: Proforma::PrawnRenderer.new)
+  end
 end
