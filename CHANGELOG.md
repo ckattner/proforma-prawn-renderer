@@ -1,3 +1,7 @@
+# 1.1.0 (July 25th, 2019)
+
+* Added support for external font loading.
+
 # 1.0.3 (July 7th, 2019)
 
 * Added better pane width balancing algorithm that fixes some width assignment bugs.

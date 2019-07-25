@@ -79,16 +79,45 @@ The `contents` attribute will contain the native PDF data.
 
 ### Prawn Customization
 
-All options for Prawn are passed through the Proforma::PrawnRenderer::Options object:
+All options for Prawn are passed through the Util::Options object:
 
-Name             | Default
----------------- | -------
-bold_font_style  | bold
-header_font_size | 15
-text_font_size   | 10
-font_name        | null
+Name             | Default | Type
+---------------- | ------- | -----------------
+bold_font_style  | bold    | symbol or string
+header_font_size | 15      | number
+text_font_size   | 10      | number
+font_name        | nil     | nil or string
+fonts            | []      | array of Util::Font objects or hashes with same attribute keys.
 
-These options will be used during the PDF rendering process.
+You can choose to pass in either a Util::Options instance or a hash with the same attribute keys.  These options will be used during the PDF rendering process.
+
+### Custom Fonts
+
+The fonts option above allows you to specify different fonts to use.  This is particularly useful if you wish to use fonts that better support internationalization.  Here is an example of defining and using a custom font:
+
+````
+options = {
+  font_name: 'Tuffy',
+  fonts: [
+    {
+      bold_path: File.join('fonts', 'Tuffy_Bold.ttf'),
+      name: 'Tuffy',
+      normal_path: File.join('fonts', 'Tuffy.ttf')
+    }
+  ]
+}
+
+renderer = Proforma::PrawnRenderer.new(options)
+
+# ...
+# Omitted data declaration
+# Omitted template declaration
+# ...
+
+documents = Proforma.render(data, template, renderer: renderer)
+````
+
+Note: Update the paths to reflect the actual locations on your machine/server.
 
 ## Contributing
 

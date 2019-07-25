@@ -112,6 +112,43 @@ describe ::Proforma::PrawnRenderer do
       ]
     }
 
-    Proforma.render(data, template, renderer: Proforma::PrawnRenderer.new)
+    actual_documents = Proforma.render(data, template, renderer: Proforma::PrawnRenderer.new)
+
+    expect(actual_documents.length).to eq(1)
+  end
+
+  specify 'Custom fonts can be used' do
+    data = [{ name: '井友' }]
+
+    template = {
+      children: [
+        { type: 'Header', value: '井友' },
+        { type: 'Header', value: 'Text - 井友' },
+        { type: 'Separator' },
+        {
+          type: 'DataTable',
+          columns: [
+            { header: '井友', body: '$name' }
+          ]
+        }
+      ]
+    }
+
+    options = {
+      font_name: 'Tuffy',
+      fonts: [
+        {
+          bold_path: File.join(Dir.pwd, 'spec', 'fixtures', 'fonts', 'Tuffy_Bold.ttf'),
+          name: 'Tuffy',
+          normal_path: File.join(Dir.pwd, 'spec', 'fixtures', 'fonts', 'Tuffy.ttf')
+        }
+      ]
+    }
+
+    renderer = Proforma::PrawnRenderer.new(options)
+
+    actual_documents = Proforma.render(data, template, renderer: renderer)
+
+    expect(actual_documents.length).to eq(1)
   end
 end

@@ -9,7 +9,7 @@
 
 require './spec/spec_helper'
 
-describe ::Proforma::PrawnRenderer::BalancedSet do
+describe ::Proforma::PrawnRenderer::Util::BalancedSet do
   describe '#calculate' do
     specify 'with no explicit values' do
       expect(described_class.calculate([nil], 100)).to            eq([100])

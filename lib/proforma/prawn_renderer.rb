@@ -7,6 +7,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+require 'acts_as_hashable'
 require 'forwardable'
 require 'prawn'
 require 'prawn/table'
@@ -20,18 +21,13 @@ require_relative 'prawn_renderer/separator_renderer'
 require_relative 'prawn_renderer/spacer_renderer'
 require_relative 'prawn_renderer/table_renderer'
 require_relative 'prawn_renderer/text_renderer'
+require_relative 'prawn_renderer/util/font'
+require_relative 'prawn_renderer/util/options'
 
 module Proforma
   # This main class to use as a Proforma renderer.
   class PrawnRenderer
     EXTENSION = '.pdf'
-
-    DEFAULT_OPTIONS = {
-      bold_font_style: :bold,
-      font_name: nil,
-      text_font_size: 10,
-      header_font_size: 15
-    }.freeze
 
     RENDERERS = {
       Modeling::Banner => BannerRenderer,
@@ -48,7 +44,7 @@ module Proforma
     attr_reader :options
 
     def initialize(options = {})
-      @options = OpenStruct.new(DEFAULT_OPTIONS.merge(options))
+      @options = Util::Options.make(options)
 
       clear
     end
@@ -70,10 +66,20 @@ module Proforma
     attr_reader :pdf, :renderers
 
     def clear
-      @pdf = Prawn::Document.new
+      @pdf = fresh_pdf
 
       @renderers = RENDERERS.each_with_object({}) do |(model_class, renderer_class), hash|
         hash[model_class] = renderer_class.new(pdf, options)
+      end
+    end
+
+    def fresh_pdf
+      Prawn::Document.new.tap do |p|
+        options.fonts.each do |font|
+          p.font_families.update(font.prawn_config)
+        end
+
+        p.font(options.font_name)
       end
     end
 

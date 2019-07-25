@@ -13,6 +13,9 @@ module Proforma
   class PrawnRenderer
     # This class understands how to ender a Proforma::Modeling::Banner component.
     class BannerRenderer < Renderer
+      PAD_LEFT    = [0, 0, 0, 10].freeze
+      NO_PADDING  = [0, 0, 0, 0].freeze
+
       def render(banner)
         pdf.table(
           make_rows(banner),
@@ -64,7 +67,6 @@ module Proforma
       def cell_style
         @cell_style ||= {
           border_width: 0,
-          font: font_name,
           min_font_size: 1,
           overflow: :shrink_to_fit,
           padding: 0,
@@ -73,7 +75,7 @@ module Proforma
       end
 
       def text_cell_style(pad_left)
-        padding = pad_left ? [0, 0, 0, 10] : [0, 0, 0, 0]
+        padding = pad_left ? PAD_LEFT : NO_PADDING
 
         cell_style.merge(
           inline_format: true,

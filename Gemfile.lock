@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    proforma-prawn-renderer (1.0.3)
+    proforma-prawn-renderer (1.1.0)
+      acts_as_hashable (~> 1)
       prawn (~> 2)
       prawn-table (~> 0)
       proforma (~> 1)

@@ -16,7 +16,6 @@ module Proforma
       def render(text)
         pdf.text(
           text.value.to_s,
-          font: font_name,
           size: text_font_size
         )
       end

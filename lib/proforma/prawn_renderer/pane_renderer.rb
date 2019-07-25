@@ -7,7 +7,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-require_relative 'balanced_set'
+require_relative 'util/balanced_set'
 require_relative 'renderer'
 
 module Proforma
@@ -81,16 +81,15 @@ module Proforma
       def make_column_widths(columns)
         widths = columns.map { |col| [col.label_width, col.value_width] }.flatten
 
-        BalancedSet.calculate(widths, 100)
-                   .map
-                   .with_index { |v, i| [i, calculate_width(v)] }
-                   .to_h
+        Util::BalancedSet.calculate(widths, 100)
+                         .map
+                         .with_index { |v, i| [i, calculate_width(v)] }
+                         .to_h
       end
 
       def base_value_cell_style
         @base_value_cell_style ||= {
           border_width: 0,
-          font: font_name,
           min_font_size: 1,
           overflow: :shrink_to_fit,
           padding: [2, 0, 2, 2],

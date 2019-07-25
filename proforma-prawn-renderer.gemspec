@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.3.8'
 
+  s.add_dependency('acts_as_hashable', '~>1')
   s.add_dependency('prawn', '~>2')
   s.add_dependency('prawn-table', '~>0')
   s.add_dependency('proforma', '~>1')
